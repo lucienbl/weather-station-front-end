@@ -4,17 +4,53 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 	<title>weather Station</title>
+	<meta charset="utf-8">
 
 <style>
-img {
-  -webkit-filter: blur(3px); /* Safari 6.0 - 9.0 */
-  filter: blur(3px);
-}
+	img {
+	  -webkit-filter: blur(3px); /* Safari 6.0 - 9.0 */
+	  filter: blur(3px);
+	}
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	let ip = "http://172.16.3.6";
+	let data = {};
+	$(document).ready(function(){
+		$.get(`${ip}/data`, function(data, status){
+		    data = data;
+		});
+	  	$("#green").click(function(){
+	  		document.getElementById("green").innerHTML = "Loading..."; 
+		    $.get(`${ip}/green`, function(data, status){
+		    	document.getElementById("green").innerHTML = "Green"; 
+		    });
+		});
+		$("#blue").click(function(){
+		    document.getElementById("blue").innerHTML = "Loading...";
+		    $.get(`${ip}/blue`, function(data, status){
+		      document.getElementById("blue").innerHTML = "Blue"; 
+		    });
+		});
+		$("#red").click(function(){
+			document.getElementById("red").innerHTML = "Loading...";
+		    $.get(`${ip}/red`, function(data, status){
+		      document.getElementById("red").innerHTML = "Red"; 
+		    });
+		});
+		$("#white").click(function(){
+			document.getElementById("white").innerHTML = "Loading...";
+		    $.get(`${ip}/white`, function(data, status){
+		      document.getElementById("white").innerHTML = "White"; 
+		    });
+		});
+	});
+</script>
 </head>
-<body>
+<body id="body">
 
+<!--Navbar-->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  <a class="navbar-brand" href="#">Weather Station</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,12 +59,12 @@ img {
 
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto"></ul>
-	    <form class="form-inline my-2 my-lg-0">
-	    	<button style="margin-left: 5px;" class="btn btn-outline-success my-2 my-sm-0" type="submit">Green</button>		
-	    	<button style="margin-left: 5px;" class="btn btn-outline-primary my-2 my-sm-0" type="submit">Blue</button>
-	    	<button style="margin-left: 5px;" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Red</button>
-	    	<button style="margin-left: 5px;" class="btn btn-outline-dark my-2 my-sm-0" type="submit">White</button>
-	    </form>
+	    <div class="form-inline my-2 my-lg-0">
+	    	<button id="green" style="margin-left: 5px;" class="btn btn-outline-success my-2 my-sm-0">Green</button>		
+	    	<button id="blue" style="margin-left: 5px;" class="btn btn-outline-primary my-2 my-sm-0" type="submit">Blue</button>
+	    	<button id="red" style="margin-left: 5px;" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Red</button>
+	    	<button id="white" style="margin-left: 5px;" class="btn btn-outline-dark my-2 my-sm-0" type="submit">White</button>
+	    </div>
 	  </div>
 	</nav>
 	
@@ -40,7 +76,7 @@ img {
 			  		<img src="https://sf2.viepratique.fr/wp-content/uploads/sites/8/2017/04/comment-amenager-l-interieur-de-sa-maison-en-bois-750x410.jpg" class="img-fluid card-img" alt="Indoor">
 			  		<div class="card-img-overlay">
 			  		<h5 class="card-title">Last update: 08/09/2018 at 09:32 PM</h5>
-			    	<p class="card-text">temperature=20 humidity=30</p>
+			    	<p class="card-text">>temperature=15 humidity=87</p>
 			  		</div>
 				</div>
     		</div>
@@ -56,9 +92,10 @@ img {
 		</div>
 	</div>
 
-</br></br>
+	</br></br>
 
 	<script src="https://code.jquery.crossorigim/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	
 </body>
 </html>
