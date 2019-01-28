@@ -23,6 +23,11 @@
 		    console.log(data);
 		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C Humidity: ${data.indoor.humidity}%`; 
 		});
+		$.get(`${ip}/data`, function(arduinoData, status){
+		    data = arduinoData;
+		    console.log(data);
+		    document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C Humidity: ${data.outdoor.humidity}%`; 
+		});
 	  	$("#green").click(function(){
 	  		document.getElementById("green").innerHTML = "Loading..."; 
 		    $.get(`${ip}/green`, function(data, status){
