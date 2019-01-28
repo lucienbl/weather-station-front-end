@@ -18,8 +18,10 @@
 	let ip = "http://172.16.3.6";
 	let data = {};
 	$(document).ready(function(){
-		$.get(`${ip}/data`, function(data, status){
-		    data = data;
+		$.get(`${ip}/data`, function(arduinoData, status){
+		    data = arduinoData;
+		    console.log(data);
+		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C Humidity: ${data.indoor.humidity}%`; 
 		});
 	  	$("#green").click(function(){
 	  		document.getElementById("green").innerHTML = "Loading..."; 
@@ -76,7 +78,7 @@
 			  		<img src="https://sf2.viepratique.fr/wp-content/uploads/sites/8/2017/04/comment-amenager-l-interieur-de-sa-maison-en-bois-750x410.jpg" class="img-fluid card-img" alt="Indoor">
 			  		<div class="card-img-overlay">
 			  		<h5 class="card-title">Last update: 08/09/2018 at 09:32 PM</h5>
-			    	<p class="card-text">>temperature=15 humidity=87</p>
+			    	<p id="indoor" class="card-text">>temperature=15 humidity=87</p>
 			  		</div>
 				</div>
     		</div>
