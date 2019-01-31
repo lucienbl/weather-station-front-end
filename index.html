@@ -60,7 +60,8 @@
 		    data = arduinoData;
 		    console.log(data);
 		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C Humidity: ${data.indoor.humidity}%`; 
-			document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C Humidity: ${data.outdoor.humidity}%`; 
+			document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C 
+			Humidity: ${data.outdoor.humidity}%`; 
 			if (data.automatic === "1") {
 				document.getElementById("automatic").innerHTML = `Disable automatic`; 
 				document.getElementById("green").disabled = true;
@@ -105,19 +106,19 @@
 	<div class="container">
   		<div class="row">
     		<div class="col">
-    			<div class="card bg-dark text-white" style="width: 31rem;">
+    			<div class="card bg-dark text-white" style="width: 33rem;">
 			  		<img src="https://sf2.viepratique.fr/wp-content/uploads/sites/8/2017/04/comment-amenager-l-interieur-de-sa-maison-en-bois-750x410.jpg" class="img-fluid card-img" alt="Indoor">
 			  		<div class="card-img-overlay">
-			  		<h5 class="card-title">Last update: <span id="date_indoor"></span></h5>
+			  		<h3 class="card-title">Last update: <span id="date_indoor"></span></h3>
 			    	<p id="indoor" class="card-text">Loading...</p>
 			  		</div>
 				</div>
     		</div>
     		<div class="col">
-    	 		<div class="card bg-dark text-white" style="width: 31rem;">
+    	 		<div class="card bg-dark text-white" style="width: 33rem;">
 			  		<img src="https://geo.img.pmdstatic.net/fit/https.3A.2F.2Fwww.2Ecaminteresse.2Efr.2Fcontent.2Fuploads.2F2018.2F02.2Fciel.2Ejpg/750x422/quality/80/background-color/ffffff/background-alpha/100/focus-point/375%2C211/crop-zone/0%2C0-750x422/ciel.jpg" class="img-fluid card-img" alt="Outdoor">
 					<div class="card-img-overlay">
-			  		<h5 class="card-title">Last update: <span id="date_outdoor"></span></h5>
+			  		<h3 class="card-title">Last update: <span id="date_outdoor"></span></h3>
 			    	<p id="outdoor" class="card-text">Loading...</p>
 				</div>
   				</div>
