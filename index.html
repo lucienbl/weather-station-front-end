@@ -17,16 +17,23 @@
 	let ip = "http://172.16.3.6";
 	let data = {};
 	$(document).ready(function(){
-		$.get(`${ip}/data`, function(arduinoData, status){
-		    data = arduinoData;
-		    console.log(data);
-		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C Humidity: ${data.indoor.humidity}%`; 
-			document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C Humidity: ${data.outdoor.humidity}%`; 
-		});
+		getData();
 	  	$("#green").click(function(){
 	  		document.getElementById("green").innerHTML = "Loading..."; 
 		    $.get(`${ip}/green`, function(data, status){
 		    	document.getElementById("green").innerHTML = "Green"; 
+		    });
+		});
+		$("#automatic").click(function(){
+			let enable;
+			if (data.automatic === "1") {
+				enable = false;
+			}else{
+				enable = true;
+			}
+	  		document.getElementById("automatic").innerHTML = "Loading..."; 
+		    $.get(`${ip}/auto?on=${enable}`, function(data, status){
+		    	getData();
 		    });
 		});
 		$("#blue").click(function(){
@@ -48,6 +55,27 @@
 		    });
 		});
 	});
+	function getData() {
+		$.get(`${ip}/data`, function(arduinoData, status){
+		    data = arduinoData;
+		    console.log(data);
+		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C Humidity: ${data.indoor.humidity}%`; 
+			document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C Humidity: ${data.outdoor.humidity}%`; 
+			if (data.automatic === "1") {
+				document.getElementById("automatic").innerHTML = `Disable automatic`; 
+				document.getElementById("green").disabled = true;
+				document.getElementById("blue").disabled = true;
+				document.getElementById("red").disabled = true;
+				document.getElementById("white").disabled = true;
+			}else{
+				document.getElementById("automatic").innerHTML = `Enable automatic`; 
+				document.getElementById("green").disabled = false;
+				document.getElementById("blue").disabled = false;
+				document.getElementById("red").disabled = false;
+				document.getElementById("white").disabled = false;
+			}
+		});
+	}
 </script>
 </head>
 <body id="body">
@@ -66,6 +94,7 @@
 	    	<button id="blue" style="margin-left: 5px;" class="btn btn-outline-primary my-2 my-sm-0" type="submit">Blue</button>
 	    	<button id="red" style="margin-left: 5px;" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Red</button>
 	    	<button id="white" style="margin-left: 5px;" class="btn btn-outline-dark my-2 my-sm-0" type="submit">White</button>
+	    	<button id="automatic" style="margin-left: 35px;" class="btn btn-outline-warning my-2 my-sm-0" type="submit">Loading...</button>
 	    </div>
 	  </div>
 	</nav>
