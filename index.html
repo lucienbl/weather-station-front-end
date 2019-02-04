@@ -54,6 +54,15 @@
 		      document.getElementById("white").innerHTML = "White"; 
 		    });
 		});
+		$("#restart").click(function(){
+			document.getElementById("restart").innerHTML = "Loading...";
+		    $.get(`${ip}/reboot`, function(data, status){
+		    	location.reload();
+		    });
+		});
+		setInterval(() => {
+			getData();
+		}, 60000);
 	});
 	function getData() {
 		$.get(`${ip}/data`, function(arduinoData, status){
@@ -96,7 +105,7 @@
 	    	<button id="blue" style="margin-left: 5px;" class="btn btn-outline-primary my-2 my-sm-0" type="submit">Blue</button>
 	    	<button id="red" style="margin-left: 5px;" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Red</button>
 	    	<button id="white" style="margin-left: 5px;" class="btn btn-outline-dark my-2 my-sm-0" type="submit">White</button>
-	    	<button id="automatic" style="margin-left: 35px;" class="btn btn-outline-warning my-2 my-sm-0" type="submit">Loading...</button>
+	    	<button id="automatic" style="margin-left: 35px;" class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Loading...</button>
 	    </div>
 	  </div>
 	</nav>
@@ -124,6 +133,9 @@
 			</div>
 		</div>
 	</div>
+	<center style="margin-top: 20px;">
+		<button id="restart" class="btn btn-outline-warning btn-lg my-2 my-sm-0 ">Restart</button>
+	</center>
 
 	</br></br>
 
