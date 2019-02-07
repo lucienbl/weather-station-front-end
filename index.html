@@ -6,88 +6,14 @@
 	<title>weather Station</title>
 	<meta charset="utf-8">
 
-<style>
-	img {
-	  filter: brightness(50%);
-	}
-</style>
+	<style>
+		img {
+		  filter: brightness(50%);
+		}
+	</style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-	let ip = "http://172.16.3.6";
-	let data = {};
-	$(document).ready(function(){
-		getData();
-	  	$("#green").click(function(){
-	  		document.getElementById("green").innerHTML = "Loading..."; 
-		    $.get(`${ip}/green`, function(data, status){
-		    	document.getElementById("green").innerHTML = "Green"; 
-		    });
-		});
-		$("#automatic").click(function(){
-			let enable;
-			if (data.automatic === "1") {
-				enable = false;
-			}else{
-				enable = true;
-			}
-	  		document.getElementById("automatic").innerHTML = "Loading..."; 
-		    $.get(`${ip}/auto?on=${enable}`, function(data, status){
-		    	getData();
-		    });
-		});
-		$("#blue").click(function(){
-		    document.getElementById("blue").innerHTML = "Loading...";
-		    $.get(`${ip}/blue`, function(data, status){
-		      document.getElementById("blue").innerHTML = "Blue"; 
-		    });
-		});
-		$("#red").click(function(){
-			document.getElementById("red").innerHTML = "Loading...";
-		    $.get(`${ip}/red`, function(data, status){
-		      document.getElementById("red").innerHTML = "Red"; 
-		    });
-		});
-		$("#white").click(function(){
-			document.getElementById("white").innerHTML = "Loading...";
-		    $.get(`${ip}/white`, function(data, status){
-		      document.getElementById("white").innerHTML = "White"; 
-		    });
-		});
-		$("#restart").click(function(){
-			document.getElementById("restart").innerHTML = "Loading...";
-		    $.get(`${ip}/reboot`, function(data, status){
-		    	location.reload();
-		    });
-		});
-		setInterval(() => {
-			getData();
-		}, 60000);
-	});
-	function getData() {
-		$.get(`${ip}/data`, function(arduinoData, status){
-		    data = arduinoData;
-		    console.log(data);
-		    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C<br>Humidity: ${data.indoor.humidity}%`; 
-			document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C<br>Humidity: ${data.outdoor.humidity}%`; 
-			if (data.automatic === "1") {
-				document.getElementById("automatic").innerHTML = `Disable automatic`; 
-				document.getElementById("green").disabled = true;
-				document.getElementById("blue").disabled = true;
-				document.getElementById("red").disabled = true;
-				document.getElementById("white").disabled = true;
-			}else{
-				document.getElementById("automatic").innerHTML = `Enable automatic`; 
-				document.getElementById("green").disabled = false;
-				document.getElementById("blue").disabled = false;
-				document.getElementById("red").disabled = false;
-				document.getElementById("white").disabled = false;
-			}
-			document.getElementById('date_indoor').innerHTML = new Date().toLocaleString();
-			document.getElementById('date_outdoor').innerHTML = new Date().toLocaleString();
-		});
-	}
-</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 </head>
 <body id="body">
 
@@ -134,11 +60,133 @@
 		</div>
 	</div>
 	<center style="margin-top: 20px;">
+		<canvas id="myChart"></canvas>
 		<button id="restart" class="btn btn-outline-warning btn-lg my-2 my-sm-0 ">Restart</button>
 	</center>
 
 	</br></br>
 
+	<script>
+		let ip = "http://172.16.3.6";
+		let base = "https://raw.githubusercontent.com/lucienbl/weather-station-database-server/master/db.json";
+		let data = {};
+		let graphData = {};
+
+		$(document).ready(function(){
+			getData();
+		  	$("#green").click(function(){
+		  		document.getElementById("green").innerHTML = "Loading..."; 
+			    $.get(`${ip}/green`, function(data, status){
+			    	document.getElementById("green").innerHTML = "Green"; 
+			    });
+			});
+			$("#automatic").click(function(){
+				let enable;
+				if (data.automatic === "1") {
+					enable = false;
+				}else{
+					enable = true;
+				}
+		  		document.getElementById("automatic").innerHTML = "Loading..."; 
+			    $.get(`${ip}/auto?on=${enable}`, function(data, status){
+			    	getData();
+			    });
+			});
+			$("#blue").click(function(){
+			    document.getElementById("blue").innerHTML = "Loading...";
+			    $.get(`${ip}/blue`, function(data, status){
+			      document.getElementById("blue").innerHTML = "Blue"; 
+			    });
+			});
+			$("#red").click(function(){
+				document.getElementById("red").innerHTML = "Loading...";
+			    $.get(`${ip}/red`, function(data, status){
+			      document.getElementById("red").innerHTML = "Red"; 
+			    });
+			});
+			$("#white").click(function(){
+				document.getElementById("white").innerHTML = "Loading...";
+			    $.get(`${ip}/white`, function(data, status){
+			      document.getElementById("white").innerHTML = "White"; 
+			    });
+			});
+			$("#restart").click(function(){
+				document.getElementById("restart").innerHTML = "Loading...";
+			    $.get(`${ip}/reboot`, function(data, status){
+			    	location.reload();
+			    });
+			});
+			setInterval(() => {
+				getData();
+			}, 60000);
+		});
+		function getData() {
+			$.get(`${ip}/data`, function(arduinoData, status){
+			    data = arduinoData;
+			    console.log(data);
+			    document.getElementById("indoor").innerHTML = `Temperature: ${data.indoor.temperature}°C<br>Humidity: ${data.indoor.humidity}%`; 
+				document.getElementById("outdoor").innerHTML = `Temperature: ${data.outdoor.temperature}°C<br>Humidity: ${data.outdoor.humidity}%`; 
+				if (data.automatic === "1") {
+					document.getElementById("automatic").innerHTML = `Disable automatic`; 
+					document.getElementById("green").disabled = true;
+					document.getElementById("blue").disabled = true;
+					document.getElementById("red").disabled = true;
+					document.getElementById("white").disabled = true;
+				}else{
+					document.getElementById("automatic").innerHTML = `Enable automatic`; 
+					document.getElementById("green").disabled = false;
+					document.getElementById("blue").disabled = false;
+					document.getElementById("red").disabled = false;
+					document.getElementById("white").disabled = false;
+				}
+				document.getElementById('date_indoor').innerHTML = new Date().toLocaleString();
+				document.getElementById('date_outdoor').innerHTML = new Date().toLocaleString();
+			});
+			$.get(`${base}`, function(dbData, status){
+			    graphData = JSON.parse(dbData);
+			    let outdoorTempTable = [];
+			    let outdoorHumTable = [];
+			    let hours = [];
+			    Object.keys(graphData).forEach((id) => {
+			    	outdoorTempTable.push(Number(graphData[id].outdoor.temperature));
+			    });
+			    Object.keys(graphData).forEach((id) => {
+			    	outdoorHumTable.push(Number(graphData[id].outdoor.humidity));
+			    });
+			    Object.keys(graphData).forEach((id) => {
+			    	hours.push(new Date(Number(id)).toLocaleTimeString());
+			    });
+			  
+				var ctx = document.getElementById('myChart').getContext('2d');
+				var chart = new Chart(ctx, {
+					// The type of chart we want to create
+					type: 'line',
+
+					// The data for our dataset
+					data: {
+					    labels: [...hours],
+					    datasets: [
+						    {
+						        label: "Temperature exterieure",
+						        backgroundColor: 'rgb(119, 181, 254)',
+						        borderColor: 'rgb(255, 99, 132)',
+						        data: [...outdoorTempTable],
+						    },
+						    {
+						        label: "Humidité exterieure",
+						        backgroundColor: 'rgb(255, 255, 132)',
+						        borderColor: 'rgb(255, 255, 132)',
+						        data: [...outdoorHumTable],
+						    }
+					    ]
+					},
+
+					// Configuration options go here
+					options: {}
+				});
+			});
+		}
+	</script>
 	<script src="https://code.jquery.crossorigim/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 	
