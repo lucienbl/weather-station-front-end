@@ -61,6 +61,7 @@
 	</div>
 	<center style="margin-top: 20px;">
 		<canvas id="myChart"></canvas>
+		<canvas id="myChartindoor"></canvas>
 		<button id="restart" class="btn btn-outline-warning btn-lg my-2 my-sm-0 ">Restart</button>
 	</center>
 
@@ -71,6 +72,7 @@
 		let base = "https://raw.githubusercontent.com/lucienbl/weather-station-database-server/master/db.json";
 		let data = {};
 		let graphData = {};
+		let graphData2 = {};
 
 		$(document).ready(function(){
 			getData();
@@ -177,6 +179,49 @@
 						        backgroundColor: 'rgb(255, 255, 132)',
 						        borderColor: 'rgb(255, 255, 132)',
 						        data: [...outdoorHumTable],
+						    }
+					    ]
+					},
+
+					// Configuration options go here
+					options: {}
+				});
+			});
+			$.get(`${base}`, function(dbData, status){
+			    graphDataindoor = JSON.parse(dbData);
+			    let indoorTempTable = [];
+			    let indoorHumTable = [];
+			    let hours = [];
+			    Object.keys(graphDataindoor).forEach((id) => {
+			    	indoorTempTable.push(Number(graphDataindoor[id].indoor.temperature));
+			    });
+			    Object.keys(graphDataindoor).forEach((id) => {
+			    	indoorHumTable.push(Number(graphDataindoor[id].indoor.humidity));
+			    });
+			    Object.keys(graphDataindoor).forEach((id) => {
+			    	hours.push(new Date(Number(id)).toLocaleTimeString());
+			    });
+			  
+				var ctx = document.getElementById('myChartindoor').getContext('2d');
+				var chart = new Chart(ctx, {
+					// The type of chart we want to create
+					type: 'line',
+
+					// The data for our dataset
+					data: {
+					    labels: [...hours],
+					    datasets: [
+						    {
+						        label: "Temperature interieur",
+						        backgroundColor: 'rgb(119, 181, 254)',
+						        borderColor: 'rgb(255, 99, 132)',
+						        data: [...indoorTempTable],
+						    },
+						    {
+						        label: "Humidité interieur",
+						        backgroundColor: 'rgb(255, 255, 132)',
+						        borderColor: 'rgb(255, 255, 132)',
+						        data: [...indoorHumTable],
 						    }
 					    ]
 					},
