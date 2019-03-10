@@ -59,20 +59,36 @@
 			</div>
 		</div>
 	</div>
-	<center style="margin-top: 20px;">
-		<canvas id="myChart"></canvas>
-		<canvas id="myChartindoor"></canvas>
-		<button id="restart" class="btn btn-outline-warning btn-lg my-2 my-sm-0 ">Restart</button>
-	</center>
+	<div style="margin-top: 20px;">
+		<div class="container" style="margin-bottom: 50px;">
+  		    <div class="row">
+    		        <div class="col">
+			    <center>
+		            	<canvas style="max-width: 500px;" id="myChartindoor"></canvas>
+                            </center>
+                        </div>
+                        <div class="col">
+			    <center>
+		            	<canvas style="max-width: 500px;" id="myChart"></canvas>
+                            </center>
+                        </div>
+                    </div>
+		</div>
+   		<center>
+		    <button id="restart" class="btn btn-outline-warning btn-lg my-2 my-sm-0 ">Restart</button>
+    		</center>
+	</div>
 
 	</br></br>
 
 	<script>
 		let ip = "http://172.16.3.6";
-		let base = "https://raw.githubusercontent.com/lucienbl/weather-station-database-server/master/db.json";
+		// const base = "https://raw.githubusercontent.com/lucienbl/weather-station-database-server/master/db.json";
+		const base = "http://localhost:3000";
 		let data = {};
 		let graphData = {};
 		let graphDataindoor = {};
+		const size = 10;
 
 		$(document).ready(function(){
 			getData();
@@ -120,7 +136,7 @@
 			});
 			setInterval(() => {
 				getData();
-			}, 60000);
+			}, 20000);
 		});
 		function getData() {
 			$.get(`${ip}/data`, function(arduinoData, status){
@@ -145,7 +161,7 @@
 				document.getElementById('date_outdoor').innerHTML = new Date().toLocaleString();
 			});
 			$.get(`${base}`, function(dbData, status){
-			    graphData = JSON.parse(dbData);
+			    graphData = dbData;
 			    let outdoorTempTable = [];
 			    let outdoorHumTable = [];
 			    let hours = [];
@@ -166,29 +182,31 @@
 
 					// The data for our dataset
 					data: {
-					    labels: [...hours],
+					    labels: [...hours.slice(-size)],
 					    datasets: [
 						    {
 						        label: "Temperature exterieure",
-						        backgroundColor: 'rgb(119, 181, 254)',
-						        borderColor: 'rgb(255, 99, 132)',
-						        data: [...outdoorTempTable],
+						        backgroundColor: '#E85334AA',
+						        borderColor: '#E85334',
+						        data: [...outdoorTempTable.slice(-size)],
 						    },
 						    {
 						        label: "Humidité exterieure",
-						        backgroundColor: 'rgb(255, 255, 132)',
-						        borderColor: 'rgb(255, 255, 132)',
-						        data: [...outdoorHumTable],
+						        backgroundColor: '#1281E8AA',
+						        borderColor: '#1281E8',
+						        data: [...outdoorHumTable.slice(-size)],
 						    }
 					    ]
 					},
 
 					// Configuration options go here
-					options: {}
+					options: {
+						animation: false
+					}
 				});
 			});
 			$.get(`${base}`, function(dbData, status){
-			    graphDataindoor = JSON.parse(dbData);
+			    graphDataindoor = dbData;
 			    let indoorTempTable = [];
 			    let indoorHumTable = [];
 			    let hours = [];
@@ -209,25 +227,27 @@
 
 					// The data for our dataset
 					data: {
-					    labels: [...hours],
+					    labels: [...hours.slice(-size)],
 					    datasets: [
 						    {
 						        label: "Temperature interieur",
-						        backgroundColor: 'rgb(119, 181, 254)',
-						        borderColor: 'rgb(255, 99, 132)',
-						        data: [...indoorTempTable],
+						        backgroundColor: '#E85334AA',
+						        borderColor: '#E85334',
+						        data: [...indoorTempTable.slice(-size)],
 						    },
 						    {
 						        label: "Humidité interieur",
-						        backgroundColor: 'rgb(255, 255, 132)',
-						        borderColor: 'rgb(255, 255, 132)',
-						        data: [...indoorHumTable],
+						        backgroundColor: '#1281E8AA',
+						        borderColor: '#1281E8',
+						        data: [...indoorHumTable.slice(-size)],
 						    }
 					    ]
 					},
 
 					// Configuration options go here
-					options: {}
+					options: {
+						animation: false
+					}
 				});
 			});
 		}
